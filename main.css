@@ -2,9 +2,10 @@ html {scroll-behavior: smooth;}
 body {font-family: 'Open Sans', sans-serif; color: #454545; margin: 0}
 h1 {  color: #03264F; font-weight: bold;}
 h3 { color: #03264F; font-weight: normal;}
+h4 {margin-block-end: 0.5em}
 img { max-width: 50em; width: 100%; display: block}
 td { padding: 0.5em 0.5em; }
-#content50 { max-width: 50em; margin:0 auto; padding: 1rem; }
+#content { max-width: 80em; margin:0 auto; padding: 1rem; }
 #navbar {
     background-color: ghostwhite; 
     align-items:center; 
@@ -40,6 +41,34 @@ summary {
     border: 1px solid #ccc;
     cursor: pointer;
 }
+
+.video { display:inline-block; }
+
+.course {
+    display:inline-block; 
+    width: 30em; 
+    vertical-align: top;
+}
+
+@media screen and (min-width:1101px) { 
+    .video {width: 600px; height: 380px; padding-right: 2em; } 
+}
+
+@media screen and (max-width:1200px) {
+    .video { width: 100%; height: 50vw;}
+  }
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+ol {
+    margin-top: 0;
+    margin-bottom: 1.5em;
+}
+
 
 
 

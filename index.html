@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<meta name="viewport" content="width=device-width"/>
 <html lang="en">
   <head>
     <title>Crop Mapping Course 2025</title>
@@ -28,103 +29,132 @@
         </div>
     </div>
     
-    <!-- Main -->
-    <div id="content50">
-        <!-- <h1>Cropland Mapping using Google Earth Engine</h1>
+    <div id="content">
+        
+        <h1>Cropland Mapping using Google Earth Engine</h1>
         <strong>Instructor: </strong> Ivan Zvonkov (University of Maryland)
-        <br>
-        <br> -->
-
-        <img src="assets/crop-mapping-course.png"/>
         
-        <!-- <a href="#outline">Course Outline</a>
-        &nbsp;|&nbsp;
-        <a href="#project">Mapping Project</a>
-        &nbsp;|&nbsp;
-        <a href="#resources">Resources</a>
-        <br>
-        <br> -->
-        <!-- <h1 id="outline">Course</h1> -->
+        <br><br>
         
-        
-        <details>
+        <details open>
             <summary>🌾 1. What is cropland and why map it?</summary>
             
-            <h2>Video (<a href="https://docs.google.com/presentation/d/1pPn94p69DDA6zRJCRn1v_Y-L5qr_Yeoz1QZidk2yQvo/edit?usp=sharing">Slides</a>)</h2>
-            <iframe width="100%" height="440px" src="https://www.youtube.com/embed/M8CrI6eNMYs?si=RIlMx8r97zD7mV2Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            <hr/>
-            <h2>Assignment</h2>
-            <h3><a href="https://code.earthengine.google.com/94b7fa0b43519872716c02730b891f7f">01_GLAD_cropland</a></h3>
+            <div class="video" >
+                <iframe src="https://www.youtube.com/embed/M8CrI6eNMYs?si=RIlMx8r97zD7mV2Y" title="Video player" allowfullscreen></iframe>
+                <h3><a href="https://docs.google.com/presentation/d/1pPn94p69DDA6zRJCRn1v_Y-L5qr_Yeoz1QZidk2yQvo/edit?usp=sharing">Slides</a></h3> 
+            </div>
             
-            <input type="checkbox" id="11">
-            <label for="11"><strong>Task 1: </strong>Run script and investigate map</label><br>
+            <div class="course">
+                <h2>Learning Outcomes</h2>
+                <ol>
+                    <li>✅ Understand definitions of cropland</li>
+                    <li>✅ Understand why cropland maps are needed</li>
+                </ol>
+                <hr/>
+                <h2>Assignment</h2>
+                <h4><a href="https://code.earthengine.google.com/94b7fa0b43519872716c02730b891f7f">01_GLAD_cropland</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate map</li>
+                    <li><input type="checkbox">Modify script to display maps from all years in <a href="https://www.nature.com/articles/s43016-021-00429-z">paper</a></li>
+                    <li><input type="checkbox"><strong>[BONUS CHALLENGE]</strong> Modify script to display maps together as in paper <a href="https://glad.earthengine.app/view/global-cropland-dynamics">Earth Engine App</a></li>
+                </ol>
+                
+                <hr/>
+            </div>
 
-            
-            <input type="checkbox" id="12">
-            <label for="12"><strong>Task 2: </strong>Modify script to display maps from all years available in <a href="https://www.nature.com/articles/s43016-021-00429-z">paper</a></label><br>
-
-            <input type="checkbox" id="13">
-            <label for="13"><strong>Task 3 (BONUS CHALLENGE): </strong>Modify script to display maps together as in paper <a href="https://glad.earthengine.app/view/global-cropland-dynamics">Earth Engine App</a></label><br>
-            <hr/>
-           
-            <h2>Learning Outcomes</h2>
-            <ol>
-                <li>✅ Understand definitions of cropland</li>
-                <li>✅ Understand why cropland maps are needed</li>
-            </ol>
-            <hr/>
             <br><br>
         </details>
 
         <details>
             <summary>🇸🇳 2. Cropland in a specific region of interest</summary>
-            
-            <h2>Video (<a href="https://docs.google.com/presentation/d/1UF_dvTolOR4LfKgIDfZgby8vYmFe0cnEbrvQL08YdPI/edit?usp=sharing">Slides</a>)</h2>
-            <iframe width="100%" height="440px" src="https://www.youtube.com/embed/wrf5RoJvOP8?si=EkvUWdhRXuaZ2VQp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            <hr/>
-            <h2>Assignment</h2>
-            <h3><a href="https://code.earthengine.google.com/25f5f1284986730220447dd245e11af7">02a_GLAD_in_Senegal</a></h3>
-            <input type="checkbox" id="21">
-            <label for="21"><strong>Task 1: </strong>Run script and investigate result</label><br>
-            
-            <input type="checkbox" id="22">
-            <label for="22"><strong>Task 2: </strong>Modify the script following the TODO comments to display cropland in Senegal</label><br>
-            <br>
-            
-            <h3><a href="https://code.earthengine.google.com/d5389494e655b166c615b0aea2fd4a5a">02b_WorldCover_in_Senegal</a></h3>
-            <input type="checkbox" id="23">
-            <label for="23"><strong>Task 3: </strong>Run script and investigate result</label><br>
-            
-            <input type="checkbox" id="24">
-            <label for="24"><strong>Task 4: </strong>Modify the script following the TODO comments to display cropland in Senegal</label><br>
-            <br>
-            <h3><a href="https://code.earthengine.google.com/97a0167cd1443fdc553170ecb1fc55c1">02c_visualizing_all_maps</a></h3>
-            <input type="checkbox" id="25">
-            <label for="25"><strong>Task 5: </strong>Run script and investigate result</label><br>
-            
-            <input type="checkbox" id="26">
-            <label for="26"><strong>Task 6: </strong>Modify the script following the TODO comments to display multiple cropland maps</label><br>
-            <hr/>
 
-            <h2>Learning Outcomes</h2>
-            <ol>
-                <li>✅ Understand Senegal geography</li>
-                <li>✅ Load and investigate available cropland maps</li>
-            </ol>
-            <hr/>
-            <br>
+            <div class="video" >
+                <iframe src="https://www.youtube.com/embed/wrf5RoJvOP8?si=EkvUWdhRXuaZ2VQp" title="Video player" allowfullscreen></iframe>
+                <h3><a href="ttps://docs.google.com/presentation/d/1UF_dvTolOR4LfKgIDfZgby8vYmFe0cnEbrvQL08YdPI/edit?usp=sharing">Slides</a></h3> 
+            </div>
+
+            <div class="course">
+                <h2>Learning Outcomes</h2>
+                <ol>
+                    <li>✅ Understand Senegal geography</li>
+                    <li>✅ Load and investigate available cropland maps</li>
+                </ol>
+                <hr/>
+                <h2>Assignment</h2>
+
+                <h4><a href="https://code.earthengine.google.com/25f5f1284986730220447dd245e11af7">02a_GLAD_in_Senegal</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to display cropland in Senegal</li>
+                </ol>
+               
+                <h4><a href="https://code.earthengine.google.com/d5389494e655b166c615b0aea2fd4a5a">02b_WorldCover_in_Senegal</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to display cropland in Senegal</li>
+                </ol>
+                
+                <h4><a href="https://code.earthengine.google.com/97a0167cd1443fdc553170ecb1fc55c1">02c_visualizing_all_maps</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to display multiple cropland maps</li>
+                </ol>
+                
+                <hr/>
+            </div>
+            
+            
+            
+            
+
+            
             
         </details>
 
-       
-
         <details>
             <summary>🛰️ 3. Data used to map cropland</summary>
-            <h2>Video (<a href="https://docs.google.com/presentation/d/1ovAUFnlNySt7DjQjpfDwjetDA0iymKktmR8V1mQFwGQ/edit?usp=sharing">Slides</a>)</h2>
-            <iframe width="100%" height="440px" src="https://www.youtube.com/embed/wrf5RoJvOP8?si=EkvUWdhRXuaZ2VQp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-            <hr/>
-            <h2>Assignment</h2>
             
+            <div class="video" >
+                <iframe src="https://www.youtube.com/embed/NY9Boqt6FbA?si=wZTzH7L6JQexTqrl" title="Video player" allowfullscreen></iframe>
+                <h3><a href="https://docs.google.com/presentation/d/1ovAUFnlNySt7DjQjpfDwjetDA0iymKktmR8V1mQFwGQ/edit?usp=sharing">Slides</a></h3> 
+            </div>
+
+            <div class="course">
+                <h2>Learning Outcomes</h2>
+                <ol>
+                    <li>✅ Use crop calendar for data selection</li>
+                    <li>✅ Load and process S2 data</li>
+                </ol>
+                <hr/>
+                <h2>Assignment</h2>
+                <h4><a href="https://code.earthengine.google.com/3578505b4f97b6f94b6f98754751374d">03a_S2_visualize</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to display S2 (Sentinel-2) median composites</a></li>
+                </ol>
+
+                <h4><a href="https://code.earthengine.google.com/04a7a9a5af5e5235c27c76f079cecc3c">03b_S2_cloudscore_visualize</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to display S2 cloudfree median composites</a></li>
+                </ol>
+                
+                <h4><a href="https://code.earthengine.google.com/0600e0d56977c5a3c62f28f3c0498c7f">03c_S2_cloudscore_gif</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to generate S2 cloudfree median composite gif</a></li>
+                </ol>
+                
+                
+                <h4><a href="https://code.earthengine.google.com/d99e41b52e914a9e5c956a0e8b853fe0">03d_S2_NDVI</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Modify the script following the TODO comments to generate S2 NDVI composite gif</a></li>
+                    <li><input type="checkbox"><strong>[BONUS CHALLENGE]</strong> Modify the script to generate NDVI for the whole country. <em>Tip: Comment out gif generation</em></li>
+                </ol>  
+                <hr/>
+            </div>          
+
             
         </details>
 
