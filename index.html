@@ -32,6 +32,13 @@
         
         <h1>Cropland Mapping using Google Earth Engine</h1>
         <strong>Instructor: </strong> Ivan Zvonkov (University of Maryland)
+        |
+        <a href="https://www.youtube.com/playlist?list=PL-9oZ-VfNz0tSYovvDRYTc1TnaZLCyIxq">Youtube Playlist</a>
+        |
+        <a href="https://drive.google.com/drive/folders/1JG0J0hI6FSZ8SgeAj_pikly8AFx8jHvq?usp=sharing">Slides Folder</a>
+        | 
+        <a href="https://code.earthengine.google.com/?accept_repo=users/izvonkov/crop-mapping-2025">Google Earth Engine Repository</a>
+        
         <br><br>
         
         <details open>
@@ -222,21 +229,91 @@
         </details>
 
         <details>
-            <summary>✅ 5. From map to insight</summary>
+            <summary>💡 5. From map to information</summary>
 
-            
+            <div class="video" >
+                <iframe src="https://www.youtube.com/embed/4hDqQ-SgPDs?si=w8O9sMbsQoltUiNZ" title="Video player" allowfullscreen></iframe>
+                <h3>
+                    <a href="https://youtu.be/4hDqQ-SgPDs">Video</a>
+                    |
+                    <a href="https://docs.google.com/presentation/d/1UiZc4ibpL-akOsdlZjjPmfX_Vh5eTZ0ZZ62hZZBuaOA/edit?usp=sharing">Slides</a>
+                </h3> 
+            </div>
 
+            <div class="course">
+                <h2>Learning Outcomes</h2>
+                <ol>
+                    <li>✅ Improve cropland map</li>
+                    <li>✅ Conduct accuracy assessment</li>
+                    <li>✅ Understand basics of area estimation and uses</li>
+                </ol>
+                
+                <hr/>
+
+                <h2>Assignment</h2>
+                <h4><a href="https://code.earthengine.google.com/26b4a7d25b1a1da7fbdef71b81ad1f59">5a_ML_classification_improve</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Follow the TODO comments to modify the script and better classify cropland in Saint Louis, Senegal</li>
+                </ol>
+
+                <h4><a href="https://code.earthengine.google.com/3d3c3579382407ad4111d87fbcaf5375">5b_assessing_accuracy</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Follow the TODO comments to load your map and assess its accuracy</li>
+                </ol>
+                
+                <h4><a href="https://code.earthengine.google.com/28d9bcffaa9a95e4e3d8216b1f05b339">5c_pixel_counting</a></h4>
+                <ol>
+                    <li><input type="checkbox">Run script and investigate result</li>
+                    <li><input type="checkbox">Follow the TODO comments to print the areas in km2 and the cropland area proportion</li>
+                </ol>
+            </div>
         </details>
 
+        <details>
+            
+            <summary>6. 🧠 Final Project</summary>
+            <div class="video">
+                <h2>Final Project</h2>
+                For the final project, you will be using the knowledge and skills acquired during the course 
+                to create a cropland map for a different Senegal admin zone. 
+                <p><strong>Project Deliverables</strong></p>
+                <ol>
+                    <li><input type="checkbox">Admin zone selection (Tip: use this <a href="https://code.earthengine.google.com/cb514488194d9057968e103dddcd38a0?accept_repo=users%2Fizvonkov%2Fcrop-mapping-2025">script</a>)</li>
+                    <li><input type="checkbox">One page document on the admin zone geography and agriculture</li>
+                    <li><input type="checkbox">GEE Script that processes Sentinel-2 data for cropland investigation</li>
+                    <li><input type="checkbox">GEE Script for collecting training data points</li>
+                    <li><input type="checkbox">GEE Script for creating cropland map using collected training points</li>
+                    <li><input type="checkbox">Cropland map saved as a GEE Asset</li>
+                    <li><input type="checkbox">GEE Script for conducting accuracy assessment (using provided points)</li>
+                    <li><input type="checkbox">One page document outlining your process and results</li>
+                </ol>
+            </div>
+            <div class="course">
+                <h2>Learning Outcomes</h2>
+                <ol>
+                    <li>✅ Analysis of remote sensing data</li>
+                    <li>✅ Create a quality cropland map from scratch</li>
+                    <li>✅ Conduct accuracy assessment</li>
+                </ol>
 
-
+                <h2>Optional Bonus Tasks</h2>
+                <ol>    
+                    <li><input type="checkbox">Conduct a visual assessment comparing your map to existing cropland maps</li>
+                    <li><input type="checkbox">Investigate adjustments to Sentinel-2 data time frame</li>
+                    <li><input type="checkbox">Investigate use of Sentinel-1 data in your admin zone</li>
+                    <li><input type="checkbox">Investigate other ML classifiers available in GEE</li>
+                </ol>
+            </div>
+            <hr>
+        </details>
+        
         <br/>
-        <a href="https://code.earthengine.google.com/?accept_repo=users/izvonkov/crop-mapping-2025">Google Earth Engine Repository</a>
-        
-        
-        
-
+       
+        <p>The course was supported by the University of Maryland, NASA SERVIR, and the Xylem Lab.</p>
         <div id="partners">
+            
             <div class="column">
                 <img 
                     src="assets/umd-logo.png" 
