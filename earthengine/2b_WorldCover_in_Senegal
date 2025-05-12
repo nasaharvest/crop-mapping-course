@@ -1,0 +1,26 @@
+// -----------------------------------------------------------------
+// Loading WorldCover map for Senegal
+// izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// Specifying ROi
+var countryFilter = ee.Filter.eq('ADM0_NAME', 'Senegal')
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(countryFilter);
+Map.centerObject(roi, 7);
+
+var WorldCover = ee.ImageCollection('ESA/WorldCover/v200').first()
+// TODO 1: Use the .clip() on the WorldCover to clip map to country
+// var WorldCoverSenegal = WorldCover.clip(<YOUR CODE HERE>)
+
+var visualization = {bands: ['Map']};
+// TODO 2: Display the WorldCover in Senegal
+//Map.addLayer(WorldCoverSenegal, visualization, "WorldCover in Senegal")
+
+// TODO 3: Use the .eq() to convert to binary cropland map
+// var WorldCoverSenegalCrop = WorldCoverSenegal.eq(<YOUR CODE HERE>)
+
+// TODO 4: Update to binary visualization of yellow and green
+// var visualization = {palette: ["yellow", "green"]}
+// Map.addLayer(WorldCoverSenegalCrop, visualization, "WorldCover Crops in Senegal")
+
+

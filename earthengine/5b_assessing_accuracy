@@ -1,0 +1,81 @@
+// -----------------------------------------------------------------
+// Accuracy Assessment for cropland map
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specifying Region of Interest (ROI)
+var regionFilter = "ADM0_NAME == 'Senegal' && ADM1_NAME == 'Saint louis'"
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level1").filter(regionFilter);
+Map.centerObject(roi, 9);
+
+// 2. TODO 1: Load your previously created map, make sure to threshold with .gt(0.5)
+var croplandMap = ee.Image("<YOUR CODE HERE>").gt(0.5)
+Map.addLayer(croplandMap, {palette: ["yellow", "green"], min: 0, max: 1 }, 'Cropland');
+
+// 3. Load crop/non-crop points (dataset)
+var points = ee.FeatureCollection('users/izvonkov/Senegal/2022_points').filterBounds(roi)
+Map.addLayer(points, {}, "Evaluation Points", false)
+
+// 4. Get predicted value for each evaluation point
+var evaluationPointsWithPredictions = croplandMap.sampleRegions(points)
+
+// 5. Obtain error matrix and display
+var errorMatrix = evaluationPointsWithPredictions.errorMatrix("is_crop", "classification")
+
+var cn = ['non-crop', 'crop']
+var em = errorMatrix.getInfo()
+
+var leftLabelStyle = {fontWeight: 'bold', margin: 0, padding: '0.5rem 0.5rem'}
+var topLabelStyle = {fontWeight: 'bold', margin: 0, padding: '0 0.5rem'}
+var valueStyle = {margin: 0, padding: '0.5rem 0.5rem'}
+var value2Style = {margin: 0, padding: '0 0.5rem'}
+var columns = [
+  ui.Panel([ui.Label(''), ui.Label(''), ui.Label('Map')]),
+  ui.Panel([
+    ui.Label(''), 
+    ui.Label(''), 
+    ui.Label(cn[0], leftLabelStyle), 
+    ui.Label(cn[1], leftLabelStyle), 
+    ui.Label("Total", leftLabelStyle)
+  ]),
+  ui.Panel([
+    ui.Label('Reference', {margin: 0, padding: '0 0.5rem'}),
+    ui.Label(cn[0], topLabelStyle), 
+    ui.Label(em[0][0], valueStyle),
+    ui.Label(em[0][1], valueStyle),
+    ui.Label(em[0][0] + em[0][1], valueStyle)
+    
+  ]),
+  ui.Panel([
+    ui.Label(''),
+    ui.Label(cn[1], topLabelStyle), 
+    ui.Label(em[1][0], valueStyle),
+    ui.Label(em[1][1], valueStyle),
+    ui.Label(em[1][0] + em[1][1], valueStyle)
+  ]),
+  ui.Panel([
+    ui.Label(''),
+    ui.Label("Total", topLabelStyle), 
+    ui.Label(em[0][0] + em[1][0], valueStyle),
+    ui.Label(em[0][1] + em[1][1], valueStyle),
+    ui.Label(em[0][0] + em[0][1] + em[1][0] + em[1][1], valueStyle)
+  ])
+]
+print(ui.Panel(columns, ui.Panel.Layout.flow('horizontal')))
+
+// 5. Display metrics from error matrix
+function round(value){return Math.round(value * 100) / 100}
+var columns2 = [
+  ui.Panel([
+    ui.Label("User's", topLabelStyle),  
+    ui.Label("Producer's", topLabelStyle),
+    ui.Label("Overall", topLabelStyle)
+  ]),
+  ui.Panel([
+    ui.Label(round(errorMatrix.consumersAccuracy().getInfo()[0][1]), value2Style), 
+    ui.Label(round(errorMatrix.producersAccuracy().getInfo()[1]), value2Style), 
+    ui.Label(round(errorMatrix.accuracy().getInfo()), value2Style)]),
+]
+print(ui.Panel(columns2, ui.Panel.Layout.flow('horizontal')))
+
+

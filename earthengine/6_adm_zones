@@ -1,0 +1,11 @@
+// -----------------------------------------------------------------
+// Admin zones of Senegal
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+var regionFilter = "ADM0_NAME == 'Senegal'"
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level1").filter(regionFilter);
+Map.addLayer(roi)
+Map.centerObject(roi, 8);
+Map.setOptions("satellite")
+print(roi)

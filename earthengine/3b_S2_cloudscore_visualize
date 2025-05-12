@@ -1,0 +1,47 @@
+// -----------------------------------------------------------------
+// Visualizing Sentinel-2 data (basic cloud processing)
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specify ROI 
+var country = "Senegal"
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter('ADM0_NAME=="' + country + '"')
+Map.centerObject(roi, 6);
+
+if (roi.size().getInfo() === 0) {
+  print("Check https://www.fao.org/in-action/countrystat/news-and-events/events/training-material/gaul-codes2014/en/");
+  throw country + " not found."
+} 
+
+// 2. Load S2 images for April, May, June 2022
+var clipFunc = function(img){return img.clip(roi)}
+var S2_collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2022-07-01")
+  .filterBounds(roi)
+  .map(clipFunc)
+
+var S2 = {
+  "April":  S2_collection.filterDate('2022-04-01', '2022-05-01'),
+  "May":    S2_collection.filterDate('2022-05-01', '2022-06-01'),
+  "June":   S2_collection.filterDate('2022-06-01', '2022-07-01')
+}
+
+var vis = {bands: ['B4', 'B3', 'B2'], min: 0, max: 2500};
+Map.addLayer(S2["April"].median(), vis, 'S2 April Median');
+Map.addLayer(S2["May"].median(),   vis, 'S2 May Median');
+Map.addLayer(S2["June"].median(),  vis, 'S2 June Median');
+
+// 2. Load S2 images with Cloud Score Plus for April, May, June 2022
+function cloudScorePlus(img){return img.updateMask(img.select('cs_cdf').gte(0.7))}
+var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+var S2_collection_cloudfree = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2022-07-01")
+  .filterBounds(roi)
+  .linkCollection(csPlus, ['cs_cdf'])
+  .map(cloudScorePlus)
+  .map(clipFunc)
+
+// TODO: Write the code to visualize the April, May, June median composites
+// from S2_collection_cloudfree. This should be very similar to the code above.
+
+

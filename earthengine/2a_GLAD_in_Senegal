@@ -1,0 +1,21 @@
+// -----------------------------------------------------------------
+// Loading GLAD cropland map for Senegal
+// izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// Specifying ROI
+var countryFilter = ee.Filter.eq('ADM0_NAME', 'Senegal')
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(countryFilter);
+Map.centerObject(roi, 7);
+
+// Load GLAD Cropland Map
+var collection = "users/potapovpeter/Global_cropland_2019"
+var image = ee.ImageCollection(collection).mosaic()
+var cropImage = image.updateMask(image.eq(1))
+
+// TODO 1: Use `roi` and the .clip() function to clip the `cropImage` 
+// https://developers.google.com/earth-engine/apidocs/ee-image-clip
+// var SenegalCropImage = cropImage.clip(<YOUR CODE HERE>)
+
+// TODO 2: Add `SenegalCropImage` to the Map
+//Map.addLayer(<YOUR CODE HERE>, {palette: ["limegreen"]}, "GLAD 2019")

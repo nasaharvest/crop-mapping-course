@@ -1,0 +1,68 @@
+// -----------------------------------------------------------------
+// Classifying cropland using NDVI thresholds
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specify ROI 
+var regionFilter = "ADM0_NAME == 'Senegal' && ADM1_NAME == 'Saint louis'"
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level1").filter(regionFilter);
+Map.centerObject(roi, 8);
+
+// 2. Load S2 images with Cloud Score Plus
+function clipFunc(img){return img.clip(roi)}
+function cloudScorePlus(img){return img.updateMask(img.select('cs_cdf').gte(0.7))}
+function computeNDVI(img){
+  var ndvi = img.normalizedDifference(['B8', 'B4']).rename('NDVI')
+  return img.addBands(ndvi)
+}
+
+var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+var NDVI = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2023-04-01")
+  .filterBounds(roi)
+  .linkCollection(csPlus, ['cs_cdf'])
+  .map(cloudScorePlus)
+  .map(clipFunc)
+  .map(computeNDVI)
+  .select('NDVI')
+
+// TODO 1: Add additional NDVI months
+// Make sure to update both images and months.
+var Apr_NDVI = NDVI.filterDate("2022-04-01", "2022-05-01").median()
+var Jul_NDVI = NDVI.filterDate("2022-07-01", "2022-08-01").median()
+var Oct_NDVI = NDVI.filterDate("2022-10-01", "2022-11-01").median()
+var images = [Apr_NDVI, Jul_NDVI, Oct_NDVI]
+var months = ["Apr", "Jul", "Oct"]
+
+var NDVI_palette = [
+  'ffffff', 'ce7e45', 'df923d', 'f1b555', 'fcd163', '99b718', '74a901',
+  '66a000', '529400', '3e8601', '207401', '056201', '004c00', '023b01',
+  '012e01', '011d01', '011301'
+]
+var ndviVis = {bands: ["NDVI"], palette: NDVI_palette, min: 0, max: 1};
+for (var i=0; i<images.length; i++){
+  Map.addLayer(images[i], ndviVis, "NDVI " + months[i])
+}
+
+var composite = ee.ImageCollection.fromImages(images).toBands().clip(roi);
+var ndvi = composite.select(".*_NDVI").rename(months)
+var panel = ui.Panel();
+panel.style().set({width: '400px', position: 'bottom-right'});
+Map.add(panel);
+Map.style().set('cursor', 'crosshair');
+Map.onClick(function(coords) {
+  panel.clear();
+  console.log(coords.lat + ',' + coords.lon)
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  var chart = ui.Chart.image.regions(ndvi, point, null, 10);
+  chart.setOptions({title: 'NDVI'});
+  panel.add(chart);
+});
+
+// TODO 2: Modify the formula to better classify cropland 
+var cropland = Apr_NDVI.gt(0.2).and(Jul_NDVI.gt(0.3))
+  .rename("is_crop")
+
+
+var croplandVis = {palette: ["yellow", "green"]}
+Map.addLayer(cropland, croplandVis, "Cropland")

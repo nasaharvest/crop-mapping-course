@@ -1,0 +1,82 @@
+// -----------------------------------------------------------------
+// Classifying Sentinel-2 data
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specifying the ROI
+var roi = ee.Geometry.BBox(-16.1, 16.2, -15.6, 16.5)
+Map.centerObject(roi, 11);
+
+// 2. Load S2 images with Cloud Score Plus
+function clipFunc(img){return img.clip(roi)}
+function cloudScorePlus(img){return img.updateMask(img.select('cs_cdf').gte(0.7))}
+function computeNDVI(img){
+  var ndvi = img.normalizedDifference(['B8', 'B4']).rename('NDVI')
+  return img.addBands(ndvi)
+}
+
+var start = ee.Date("2022-04-01")
+var end = ee.Date("2023-01-01")
+var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+var S2 = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate(start, end)
+  .filterBounds(roi)
+  .linkCollection(csPlus, ['cs_cdf'])
+  .map(cloudScorePlus)
+  .map(clipFunc)
+  .map(computeNDVI)
+  .select(['B2', 'B3', 'B4', 'NDVI'])
+  
+var images = []
+var daterange = []
+var current = start
+while (end.difference(current, 'month').gt(0).getInfo() == 1){
+  daterange.push(current.format("YY/MM"));
+  var next = current.advance(1, 'month');
+  images.push(S2.filterDate(current, next).median())
+  current = next
+}
+
+var vis = { bands: ['B4', 'B3', 'B2'], min: 0, max: 2500 }
+// for (var i=0; i<images.length; i++){
+//   Map.addLayer(images[i], vis, daterange[i].getInfo())
+// }
+
+// 3. Load training labels
+// TODO 1: Load crop and non crop points
+var cropPts = ee.FeatureCollection("<YOUR CODE HERE>")
+var nonCropPts = ee.FeatureCollection("<YOUR CODE HERE>") 
+
+var trainingPts = cropPts.merge(nonCropPts)
+print("Training Non-crop points: " + trainingPts.filter(ee.Filter.eq("is_crop", 0)).size().getInfo())
+print("Training Crop points: " + trainingPts.filter(ee.Filter.eq("is_crop", 1)).size().getInfo())
+
+// 5. Combine training labels with Earth observation image sequence
+var imageSequence = ee.ImageCollection.fromImages(images).toBands().unmask(0)
+var bands = imageSequence.bandNames()
+var training = imageSequence.sampleRegions({collection: trainingPts, properties: ["is_crop"], scale: 10 })
+
+// 6. Train a classifier
+// TODO 2: Fill out the trainArgs to be able to train a classifier
+// var trainArgs = {
+//  features: <YOUR CODE HERE>, 
+//  classProperty: <YOUR CODE HERE>, 
+//  inputProperties: <YOUR CODE HERE>
+// }
+// var trainedRf = ee.Classifier.smileRandomForest({numberOfTrees: 10}).train(trainArgs);
+
+// // 7. Use classifier to make predictions
+// var cropland = imageSequence.select(bands).classify(trainedRf).clip(roi);
+// var classVis = {min: 0, max: 1.0, palette: ['yellow', 'green']}
+// Map.addLayer(cropland, classVis, 'Cropland Map Binary');
+
+
+// TODO 3: Update the RandomForest to output probabilities
+// TODO 4: Map a binary and probability based cropland map
+// TODO 5: Change the ROI to cover all of Saint Louis admin zone
+// Useful code below:
+//    var regionFilter = "ADM0_NAME == 'Senegal' && ADM1_NAME == 'Saint louis'"
+//    var roi = ee.FeatureCollection("FAO/GAUL/2015/level1").filter(regionFilter);
+
+
+

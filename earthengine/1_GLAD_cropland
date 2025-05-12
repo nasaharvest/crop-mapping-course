@@ -1,0 +1,10 @@
+// -----------------------------------------------------------------
+// Loading GLAD cropland map
+// izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+var collection = "users/potapovpeter/Global_cropland_2019"
+var image = ee.ImageCollection(collection).mosaic()
+var cropImage = image.updateMask(image.eq(1))
+
+Map.addLayer(cropImage, {palette: ["limegreen"]}, "GLAD 2019")

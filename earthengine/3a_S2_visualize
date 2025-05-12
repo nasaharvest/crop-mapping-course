@@ -1,0 +1,34 @@
+// -----------------------------------------------------------------
+// Visualizing Sentinel-2 data (basic cloud processing)
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specify ROI 
+var roi = ee.Geometry.BBox(-16.1, 16.2, -15.6, 16.5)
+Map.centerObject(roi, 12);
+
+// 2. Load S2 images for April, May, June 2022
+var clipFunc = function(img){return img.clip(roi)}
+var S2_collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2022-07-01")
+  .filterBounds(roi)
+  .map(clipFunc)
+
+var S2 = {
+  "April":  S2_collection.filterDate('2022-04-01', '2022-05-01'),
+  "May":    S2_collection.filterDate('2022-05-01', '2022-06-01'),
+  "June":   S2_collection.filterDate('2022-06-01', '2022-07-01')
+}
+
+// 3. Visualize S2 images 
+// TODO: Select the bands representing Blue, Green, Red, from Sentinel-2
+// var vis = {bands: [<YOUR CODE HERE>], min: 0, max: 2500};
+// Map.addLayer(S2["April"].mosaic(), vis, 'S2 April Mosaic');
+// Map.addLayer(S2["May"].mosaic(),   vis, 'S2 May Mosaic');
+// Map.addLayer(S2["June"].mosaic(),  vis, 'S2 June Mosaic');
+
+// TODO: instead of .mosaic(), use .median() to create a median composite for each month
+//Map.addLayer(<YOUR CODE>, vis, 'S2 April Median');
+//Map.addLayer(<YOUR CODE>,   vis, 'S2 May Median');
+//Map.addLayer(<YOUR CODE>,  vis, 'S2 June Median');
+

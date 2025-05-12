@@ -1,0 +1,78 @@
+// -----------------------------------------------------------------
+// Visualizing Sentinel-2 data with Cloud Score+ and creating gif
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specify ROI 
+var roi = ee.Geometry.BBox(-16.1, 16.2, -15.6, 16.5)
+Map.centerObject(roi, 11);
+
+
+// 2. Load S2 images with Cloud Score Plus
+function clipFunc(img){return img.clip(roi)}
+function cloudScorePlus(img){return img.updateMask(img.select('cs_cdf').gte(0.7))}
+
+var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+var S2_collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2023-04-01")
+  .filterBounds(roi)
+  .linkCollection(csPlus, ['cs_cdf'])
+  .map(cloudScorePlus)
+  .map(clipFunc)
+
+var S2_months = [
+  ee.DateRange('2022-04-01', '2022-05-01'),
+  ee.DateRange('2022-05-01', '2022-06-01'),
+  ee.DateRange('2022-06-01', '2022-07-01'),
+  ee.DateRange('2022-07-01', '2022-08-01'),
+  //ee.DateRange('2022-08-01', '2022-09-01'), // Skipping too cloudy
+  //ee.DateRange('2022-09-01', '2022-10-01'), // Skipping too cloudy
+  ee.DateRange('2022-10-01', '2022-11-01'),
+  ee.DateRange('2022-11-01', '2022-12-01'),
+  ee.DateRange('2022-12-01', '2023-01-01'),
+  ee.DateRange('2023-01-01', '2023-02-01'),
+  ee.DateRange('2023-02-01', '2023-03-01'),
+  ee.DateRange('2023-03-01', '2023-04-01'),
+]
+
+// 3. Visualize S2 images 
+var vis = {bands: ['B4', 'B3', 'B2'], min: 0, max: 2500};
+
+var compositeColVis = S2_months.map(function(dateRange) {
+  var img = S2_collection.filterDate(dateRange).median().visualize(vis)
+  var startDate = dateRange.start().format("YYYY-MM-dd")
+  Map.addLayer(img, {}, startDate.getInfo())
+  return img.set('date', startDate);
+});
+
+var text = require('users/gena/packages:text');
+var vis = {forceRgbOutput: true};
+var bounds = roi.bounds();
+var annotations = [
+  {
+    // Use 'margin' for x-position and 'offset' for y-position
+    position: 'right', offset: '5%', margin: '95%',
+    property: 'date',
+    scale: Map.getScale(),
+    fontType: 'Arial', 
+    fontSize: 32,
+    fontWeight: 500 
+  }
+];
+var rgbVis = compositeColVis.map(function(img) {
+  return text.annotateImage(img, vis, bounds, annotations)
+});
+
+// TODO: Set the dimensions and framesPerSecond values to generate a gif
+// var dimensions = <YOUR CODE HERE>
+// var framesPerSecond = <YOUR CODE HERE>
+// var gifParams = {
+//   'region': roi,
+//   'dimensions': dimensions,
+//   'crs': 'EPSG:3857',
+//   'framesPerSecond': framesPerSecond
+// };
+
+// print(ee.ImageCollection(rgbVis).getVideoThumbURL(gifParams));
+
+

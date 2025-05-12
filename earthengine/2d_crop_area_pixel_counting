@@ -1,0 +1,27 @@
+// -----------------------------------------------------------------
+// Crop area estimation through pixel counting
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specifying ROi
+var countryFilter = ee.Filter.eq('ADM0_NAME', 'Senegal')
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(countryFilter);
+Map.centerObject(roi, 7);
+
+// 2. Loading cropland mask from various sources
+var classVis = {palette: ["yellow", "green"]}
+var collectionName = "ESA/WorldCover/v200"
+var collection = ee.ImageCollection(collectionName)
+var worldcover_v200 = collection.mosaic().clip(roi).eq(40).rename("crop");
+Map.addLayer(worldcover_v200, classVis, collectionName);
+
+
+// 3. Computing crop area using pixel counting
+// Based on: https://developers.google.com/earth-engine/apidocs/ee-image-pixelarea#code-editor-javascript
+var cropPixelArea = ee.Image.pixelArea().updateMask(worldcover_v200)
+var args = {reducer: ee.Reducer.sum(), geometry: roi, maxPixels: 1e8}
+var cropArea = cropPixelArea.reduceRegion(args).getNumber('area').divide(1e6)
+print('Senegal Crop Area (km2)', cropArea)
+
+var geomArea = roi.geometry().area().divide(1e6)
+print("Senegal Total Area (km2)", geomArea)

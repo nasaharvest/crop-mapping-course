@@ -1,0 +1,39 @@
+// -----------------------------------------------------------------
+// Count cropland pixels
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specifying Region of Interest (ROI)
+var regionFilter = "ADM0_NAME == 'Senegal' && ADM1_NAME == 'Saint louis'"
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level1").filter(regionFilter);
+Map.centerObject(roi, 9);
+
+// 2. TODO 1: Load your previously created map
+var croplandMap = ee.Image("<YOUR CODE HERE>").gt(0.5)
+Map.addLayer(croplandMap, {palette: ["yellow", "green"], min: 0, max: 1 }, 'Cropland');
+
+// 3. Compute total crop area
+var geom = roi.geometry()
+var geom_area = geom.area()
+
+var cropMaskPixelArea = croplandMap.multiply(ee.Image.pixelArea())
+var reducerArgs = {reducer: ee.Reducer.sum(), geometry: geom, scale: 10, maxPixels: 1e10}
+var totalCropArea = cropMaskPixelArea.reduceRegion(reducerArgs).get('classification');
+
+// 4. Convert m2 area to interpretable units
+function m2_to_Ha(m2){return ee.Number(m2).divide(1e4).toInt().getInfo() + " Ha"}
+
+// TODO 2: Convert m2 to km2 similar to above function
+function m2_to_km2(m2){return "<YOUR CODE HERE>"}
+
+print("Total land: " + m2_to_Ha(geom_area))
+print("Total land: " + m2_to_km2(geom_area))
+
+print("Total crop: " + m2_to_Ha(totalCropArea))
+print("Total crop: " + m2_to_km2(totalCropArea))
+
+// TODO 3: Compute the proportion of land mapped as cropland
+print("Cropland Proportion: ", "<YOUR CODE HERE>")
+
+
+

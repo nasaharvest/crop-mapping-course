@@ -1,0 +1,60 @@
+// -----------------------------------------------------------------
+// Visualizing Sentinel-2 data with Cloud Score+ and creating gif
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specify ROI 
+var countryFilter = ee.Filter.eq('ADM0_NAME', 'Senegal')
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(countryFilter);
+Map.centerObject(roi, 7);
+
+
+// 2. Load S2 images with Cloud Score Plus
+function clipFunc(img){return img.clip(roi)}
+function cloudScorePlus(img){return img.updateMask(img.select('cs_cdf').gte(0.7))}
+function addNDVI(img){
+  var ndvi = img.normalizedDifference(['B8', 'B4']).rename("NDVI")
+  return img.addBands(ndvi)
+}
+
+var csPlus = ee.ImageCollection('GOOGLE/CLOUD_SCORE_PLUS/V1/S2_HARMONIZED');
+var S2_collection = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED')
+  .filterDate("2022-04-01", "2023-04-01")
+  .filterBounds(roi)
+  .linkCollection(csPlus, ['cs_cdf'])
+  .map(cloudScorePlus)
+  .map(clipFunc)
+  .map(addNDVI)
+
+var S2_months = [
+  ee.DateRange('2022-04-01', '2022-05-01'),
+  ee.DateRange('2022-05-01', '2022-06-01'),
+  ee.DateRange('2022-06-01', '2022-07-01'),
+  ee.DateRange('2022-07-01', '2022-08-01'),
+  ee.DateRange('2022-08-01', '2022-09-01'), 
+  ee.DateRange('2022-09-01', '2022-10-01'), 
+  ee.DateRange('2022-10-01', '2022-11-01'),
+  ee.DateRange('2022-11-01', '2022-12-01'),
+  ee.DateRange('2022-12-01', '2023-01-01'),
+  ee.DateRange('2023-01-01', '2023-02-01'),
+  ee.DateRange('2023-02-01', '2023-03-01'),
+  ee.DateRange('2023-03-01', '2023-04-01'),
+]
+
+// 3. Visualize S2 images
+var NDVI_palette = [
+    'ffffff', 'ce7e45', 'df923d', 'f1b555', 'fcd163', '99b718', '74a901',
+    '66a000', '529400', '3e8601', '207401', '056201', '004c00', '023b01',
+    '012e01', '011d01', '011301'
+  ]
+var vis = {bands: ['NDVI'], palette: NDVI_palette, min: 0, max: 1};
+
+var compositeColVis = S2_months.map(function(dateRange) {
+  var img = S2_collection.filterDate(dateRange).median().visualize(vis)
+  var startDate = dateRange.start().format("YYYY-MM-dd")
+  Map.addLayer(img, {}, startDate.getInfo())
+  return img.set('date', startDate);
+});
+
+
+

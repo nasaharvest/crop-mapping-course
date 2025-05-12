@@ -1,0 +1,83 @@
+// -----------------------------------------------------------------
+// Loading and visualizing cropland masks from different global maps
+// Contact: izvonkov@umd.edu
+// -----------------------------------------------------------------
+
+// 1. Specifying ROi
+var countryFilter = ee.Filter.eq('ADM0_NAME', 'Senegal')
+var roi = ee.FeatureCollection("FAO/GAUL/2015/level0").filter(countryFilter);
+Map.centerObject(roi, 7);
+
+// 2. Loading cropland mask from various sources
+var classVis = {palette: ["yellow", "green"]}
+
+// COPERNICUS
+var collectionName = "COPERNICUS/Landcover/100m/Proba-V-C3/Global"
+var collection = ee.ImageCollection(collectionName)
+                  .select("discrete_classification")
+                  .filterDate("2019-01-01", "2019-12-31")
+// TODO 1: Sub in appropriate crop value
+// var copernicus = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(copernicus, classVis, collectionName);
+
+// WorldCover V100 and V200
+var collectionName = "ESA/WorldCover/v100"
+var collection = ee.ImageCollection(collectionName)
+// TODO 2: Sub in appropriate crop value
+// var worldcover_v100 = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(worldcover_v100, classVis, collectionName);
+
+var collectionName = "ESA/WorldCover/v200"
+var collection = ee.ImageCollection(collectionName)
+// TODO 3: Sub in appropriate crop value
+// var worldcover_v200 = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(worldcover_v200, classVis, collectionName);
+
+// WorldCereal
+var collectionName = "ESA/WorldCereal/2021/MODELS/v100"
+var collection = ee.ImageCollection(collectionName)
+                  .filter('product == "temporarycrops"')
+                  .select("classification")
+// TODO 4: Sub in appropriate crop value
+// var worldcereal_v100 = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(worldcereal_v100, classVis, collectionName);
+
+// GLAD
+var collectionName = "users/potapovpeter/Global_cropland_2019"
+var collection = ee.ImageCollection(collectionName)
+// TODO 5: Sub in appropriate crop value
+// var glad = collection.mosaic().clip(roi).gte(<YOUR CODE HERE>)
+// Map.addLayer(glad, classVis, collectionName);
+
+// Dynamic World
+var collectionName = "GOOGLE/DYNAMICWORLD/V1"
+var collection = ee.ImageCollection(collectionName)
+                  .filterDate("2019-01-01", "2020-01-01")
+                  .select(["label"])
+// TODO 6: Sub in appropriate crop value
+// var dynamicworld = collection.mode().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(dynamicworld, classVis, collectionName);
+
+// GFSAD GCEP
+var collectionName = "projects/sat-io/open-datasets/GFSAD/GCEP30"
+var collection = ee.ImageCollection(collectionName)
+// TODO 7: Sub in appropriate crop value
+// var gfsad_gcep = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(gfsad_gcep, classVis, collectionName);
+
+// Digital Earth Africa
+var collectionName = "projects/sat-io/open-datasets/DEAF/CROPLAND-EXTENT/filtered"
+var collection = ee.ImageCollection(collectionName)
+// TODO 8: Sub in appropriate crop value
+// var dea = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(dea, classVis, collectionName);
+
+// ESRI
+var collectionName = "projects/sat-io/open-datasets/landcover/ESRI_Global-LULC_10m_TS"
+var collection = ee.ImageCollection(collectionName)
+                  .filterDate("2019-01-01", "2020-01-01")
+// TODO 9: Sub in appropriate crop value
+// var esri = collection.mosaic().clip(roi).eq(<YOUR CODE HERE>)
+// Map.addLayer(esri, classVis, collectionName);
+
+
